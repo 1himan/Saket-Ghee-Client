@@ -92,7 +92,7 @@ export default function CartPage() {
 
               <div className="flex-grow">
                 <h2 className="text-xl font-semibold">{item.name}</h2>
-                <p className="text-gray-600">Sold by: {item.seller}</p>
+                {/* <p className="text-gray-600">Sold by: {item.seller}</p> */}
                 <p className="text-gray-600">Size: {item.volumeSize}</p>
                 <p className="text-green-600">In Stock</p>
 

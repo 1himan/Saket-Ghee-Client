@@ -1,18 +1,48 @@
-'use client'
-import React, { useState } from 'react'
-import Link from 'next/link'
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
 
 export default function Register() {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Will handle registration logic later
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: `${firstName} ${lastName}`,
+          email,
+          password,
+          phone_number: mobileNumber,
+        }),
+      });
+
+      if (!response.ok) {
+        const { message } = await response.json();
+        setError(message || "Something went wrong!");
+      } else {
+        const data = await response.json();
+        setSuccess("Account created successfully!");
+        console.log("User Data:", data);
+        // Redirect or handle further actions as needed
+      }
+    } catch (err) {
+      setError("Failed to register. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5]">
@@ -22,118 +52,75 @@ export default function Register() {
             Create your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link href="/login" className="font-medium text-[#00584B] hover:text-[#D0BD80] transition-all duration-300">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-medium text-[#00584B] hover:text-[#D0BD80] transition-all duration-300"
+            >
               Login here
             </Link>
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
+          <div className="space-y-4">
             <div className="flex space-x-4">
-              <div className="flex-1">
-                <label htmlFor="firstName" className="sr-only">
-                  First Name
-                </label>
-                <input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  required
-                  className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] focus:z-10 sm:text-sm"
-                  placeholder="First Name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
-              </div>
-              <div className="flex-1">
-                <label htmlFor="lastName" className="sr-only">
-                  Last Name
-                </label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  required
-                  className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] focus:z-10 sm:text-sm"
-                  placeholder="Last Name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
               <input
-                id="email"
-                name="email"
-                type="email"
+                id="firstName"
+                type="text"
                 required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] sm:text-sm"
+              />
+              <input
+                id="lastName"
+                type="text"
+                required
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] sm:text-sm"
               />
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] focus:z-10 sm:text-sm"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center">
             <input
-              id="terms"
-              name="terms"
-              type="checkbox"
+              id="email"
+              type="email"
               required
-              className="h-4 w-4 text-[#00584B] focus:ring-[#00584B] border-gray-300 rounded"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] sm:text-sm"
             />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-              I agree to the{' '}
-              <Link href="/terms" className="font-medium text-[#00584B] hover:text-[#D0BD80] transition-all duration-300">
-                Terms and Conditions
-              </Link>
-            </label>
+            <input
+              id="mobileNumber"
+              type="text"
+              required
+              placeholder="Mobile Number"
+              value={mobileNumber}
+              onChange={(e) => setMobileNumber(e.target.value)}
+              className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] sm:text-sm"
+            />
+            <input
+              id="password"
+              type="password"
+              required
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-[#00584B] focus:border-[#00584B] sm:text-sm"
+            />
           </div>
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#00584B] hover:bg-[#00584B]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00584B] transition-all duration-300"
-            >
-              Create Account
-            </button>
-          </div>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {success && <p className="text-green-500 text-sm">{success}</p>}
+          <button
+            type="submit"
+            className="w-full py-2 px-4 text-sm font-medium text-white bg-[#00584B] hover:bg-[#00584B]/90 rounded-md transition-all duration-300"
+          >
+            Create Account
+          </button>
         </form>
       </div>
     </div>
-  )
+  );
 }
