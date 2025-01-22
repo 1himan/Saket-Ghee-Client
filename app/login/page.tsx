@@ -32,7 +32,8 @@ export default function Login() {
         // Redirect or handle further actions as needed
       }
     } catch (err) {
-      setError("Failed to log in. Please try again.");
+      setError("Something went wrong!");
+      console.log(err); 
     }
   };
 
