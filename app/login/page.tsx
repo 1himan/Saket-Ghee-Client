@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import Link from "next/link";
 
 export default function Login() {
@@ -7,6 +8,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const router = useRouter(); // Initialize router
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ export default function Login() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
+        credentials: "include", // Include cookies in the request
       });
 
       if (!response.ok) {
@@ -29,11 +32,12 @@ export default function Login() {
         const data = await response.json();
         setSuccess("Logged in successfully!");
         console.log("User Data:", data);
-        // Redirect or handle further actions as needed
+        // Redirect to user-details page
+        router.push("/user-profile");
       }
     } catch (err) {
       setError("Something went wrong!");
-      console.log(err); 
+      console.log(err);
     }
   };
 

@@ -12,6 +12,12 @@ interface PaymentDetails {
   amount: number;
 }
 
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
 export default function Checkout() {
   const router = useRouter();
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails>({
@@ -49,7 +55,7 @@ export default function Checkout() {
       },
     };
 
-    const razorpayWindow = new (window as any).Razorpay(options);
+    const razorpayWindow = new window.Razorpay(options);
     razorpayWindow.open();
   };
 

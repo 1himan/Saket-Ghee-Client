@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/navbar";
+import ConditionalNavbar from "@/components/ConditionalNavbar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,8 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased overflow-x-hidden`}>
-        <Navbar />
+      <body className="antialiased overflow-x-hidden">
+        <ConditionalNavbar />
         {children}
       </body>
     </html>
