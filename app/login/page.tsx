@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Login() {
@@ -8,36 +8,42 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
 
+  // Get API URL from environment variables
+  // how is this working? As far as I know In the backend 
+  // I would need the dotenv package to access the environment variables
+  // but here it is working without it. How is this possible?
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
+  // this logs well
+  console.log("API_URL:", API_URL);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-        credentials: "include", // Include cookies in the request
+        credentials: "include",
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const { message } = await response.json();
-        setError(message || "Something went wrong!");
+        setError(data.message || "Something went wrong!");
       } else {
-        const data = await response.json();
         setSuccess("Logged in successfully!");
         console.log("User Data:", data);
-        // Redirect to user-details page
         router.push("/user-profile");
       }
     } catch (err) {
       setError("Something went wrong!");
-      console.log(err);
+      console.error("Login Error:", err);
     }
   };
 

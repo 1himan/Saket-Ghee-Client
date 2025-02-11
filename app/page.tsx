@@ -5,53 +5,12 @@ import Footer from "@/components/Footer";
 import { CarouselDefault } from "@/components/MiniCarousel";
 import ProductContainer from "@/components/ProductContainer";
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { reviews } from "../constants/Reviews";
 
 export default function Home() {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    if (!scrollContainer) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      scrollContainer.scrollLeft += e.deltaY;
-    };
-
-    let startX: number | undefined, scrollLeft: number | undefined;
-    const handleStart = (e: MouseEvent | TouchEvent) => {
-      startX = (e as MouseEvent).pageX || (e as TouchEvent).touches[0].pageX;
-      scrollLeft = scrollContainer.scrollLeft;
-    };
-
-    const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (startX === undefined || scrollLeft === undefined) return;
-      const x = (e as MouseEvent).pageX || (e as TouchEvent).touches[0].pageX;
-      const walk = (x - startX) * 1.5;
-      scrollContainer.scrollLeft = scrollLeft - walk;
-    };
-
-    scrollContainer.addEventListener("wheel", handleWheel, { passive: false });
-    scrollContainer.addEventListener("touchstart", handleStart, {
-      passive: true,
-    });
-    scrollContainer.addEventListener("touchmove", handleMove, {
-      passive: true,
-    });
-    scrollContainer.addEventListener("mousedown", handleStart);
-    scrollContainer.addEventListener("mousemove", handleMove);
-
-    return () => {
-      scrollContainer.removeEventListener("wheel", handleWheel);
-      scrollContainer.removeEventListener("touchstart", handleStart);
-      scrollContainer.removeEventListener("touchmove", handleMove);
-      scrollContainer.removeEventListener("mousedown", handleStart);
-      scrollContainer.removeEventListener("mousemove", handleMove);
-    };
-  }, []);
 
   const scrollLeft = () => {
     scrollContainerRef.current?.scrollBy({ left: -1220, behavior: "smooth" });

@@ -26,6 +26,7 @@ async function fetchProducts(
   limit = 20
 ): Promise<{ products: Product[]; totalResults: number }> {
   try {
+    console.log("The fucking fetch req to retriev products runs");
     const res = await fetch(
       `http://localhost:5000/products?search=${searchQuery}&page=${page}&limit=${limit}`,
       {

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Next.js router for navigation
 import Link from "next/link";
 
 export default function Register() {
@@ -10,6 +11,7 @@ export default function Register() {
   const [mobileNumber, setMobileNumber] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const router = useRouter(); // Initialize Next.js router
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +36,10 @@ export default function Register() {
         const { message } = await response.json();
         setError(message || "Something went wrong!");
       } else {
-        const data = await response.json();
         setSuccess("Account created successfully!");
-        console.log("User Data:", data);
-        // Redirect or handle further actions as needed
+        setTimeout(() => {
+          router.push("/"); // Redirect to home page after .01 seconds
+        }, 10);
       }
     } catch (err) {
       setError("Failed to register. Please try again.");
